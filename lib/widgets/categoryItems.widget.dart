@@ -13,7 +13,7 @@ class CategoryItem extends StatelessWidget {
   //push named pushes the specified arguments to the specified route
   void selectCategory(BuildContext ctx) {
     Navigator.of(ctx).pushNamed(
-      routeNames['categoryMealsPage'], arguments: {'id': id, 'title': title}
+      routeNames['categoryMealsScreen'], arguments: {'id': id, 'title': title}
     );
   }
 

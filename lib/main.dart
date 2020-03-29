@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './routes/routes.dart';
+import './screens/categories.screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,12 +23,25 @@ class MyApp extends StatelessWidget {
               body2: TextStyle(
                 color: Color.fromRGBO(20, 51, 51, 1),
               ),
-              title: TextStyle(fontSize: 15, fontFamily: 'OpenSans', fontWeight: FontWeight.bold, color: Colors.white),
+              title: TextStyle(fontSize: 15, fontFamily: 'OpenSans', fontWeight: FontWeight.bold),
             ),
       ),
       //home: CategoriesScreen(),
       initialRoute: '/',
       routes: routes,
+      //flutter routes for fallbacks and handling weird route situations
+      onGenerateRoute: (settings) {//will default to this route if route isnt found in routes table
+      //you can use the default settings arg available in this function to dynamically
+      //decide what screen to render. this can happen if routes are generated on the fly
+      // if(settings.name == './my-dynamic-route'){
+      //   return 'material page route with some screen';
+      // }
+        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+      },
+      onUnknownRoute: (settings) {//this one is a last resort function that can be used if route isnt found on routes table
+      //and also if on generate route is not defined
+        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 final Map<String, String> routeNames = {
-  'homePage': '/',
-  'categoryMealsPage': '/category-meals'
+  'homeScreen': '/',
+  'categoryMealsScreen': '/category-meals',
+  'mealDetails': '/meal-details'
 };
