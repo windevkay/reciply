@@ -5,17 +5,27 @@ import './favorites.screen.dart';
 import '../widgets/mainDrawer.widget.dart';
 
 class TabScreen extends StatefulWidget {
+  final List favoriteMeals;
+  TabScreen(this.favoriteMeals);
+
   @override
   _TabScreenState createState() => _TabScreenState();
 }
 
 class _TabScreenState extends State<TabScreen> {
-  final List<Map<String, Object>> _pages = [
-    {'page': CategoriesScreen(), 'title': 'Reciply'}, 
-    {'page': FavoritesScreen(), 'title': 'Your Favorites'}
-  ];
-
+  List<Map<String, Object>> _pages;
   int _selectedPageIndex = 0;
+
+  @override
+  void initState() {
+    //we are using init state here cos we need access to favoritemeals via the widget object
+    //which isnt available to use except within lifecycles and the build method
+    super.initState();
+    _pages = [
+      {'page': CategoriesScreen(), 'title': 'Reciply'},
+      {'page': FavoritesScreen(widget.favoriteMeals), 'title': 'Your Favorites'}
+    ];
+  }
 
   void _selectPage(int index) {
     //this will auto get the index of the tab that is clicked

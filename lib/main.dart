@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
   };
 
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
 
   void _setFilters(Map<String, bool> filterData) {
     setState(() {
@@ -45,6 +46,24 @@ class _MyAppState extends State<MyApp> {
       }).toList();
     });
   }
+
+  void _toggleFavorite(String mealId){
+    final existingIndex = _favoriteMeals.indexWhere((meal) => meal.id == mealId);
+    if(existingIndex >= 0){
+      setState(() {
+        _favoriteMeals.removeAt(existingIndex);
+      });
+    }else{
+      setState(() {
+        _favoriteMeals.add(DUMMY_MEALS.firstWhere((meal) => meal.id == mealId));
+      });
+    }
+  }
+
+  bool _isMealFavorite(String id) {
+    return _favoriteMeals.any((meal) => meal.id == id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,7 +85,7 @@ class _MyAppState extends State<MyApp> {
       ),
       //home: CategoriesScreen(),
       initialRoute: '/',
-      routes: returnRoutes(_setFilters, _filters, _availableMeals),
+      routes: returnRoutes(_setFilters, _filters, _availableMeals, _favoriteMeals, _toggleFavorite, _isMealFavorite),
       //flutter routes for fallbacks and handling weird route situations
       onGenerateRoute: (settings) {//will default to this route if route isnt found in routes table
       //you can use the default settings arg available in this function to dynamically
@@ -74,11 +93,11 @@ class _MyAppState extends State<MyApp> {
       // if(settings.name == './my-dynamic-route'){
       //   return 'material page route with some screen';
       // }
-        return MaterialPageRoute(builder: (ctx) => TabScreen());
+        return MaterialPageRoute(builder: (ctx) => TabScreen(_favoriteMeals));
       },
       onUnknownRoute: (settings) {//this one is a last resort function that can be used if route isnt found on routes table
       //and also if on generate route is not defined
-        return MaterialPageRoute(builder: (ctx) => TabScreen());
+        return MaterialPageRoute(builder: (ctx) => TabScreen(_favoriteMeals));
       },
     );
   }

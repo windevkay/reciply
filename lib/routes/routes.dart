@@ -5,11 +5,11 @@ import '../screens/filterSettings.screen.dart';
 
 import './routes.names.dart';
 
-dynamic returnRoutes(Function setFilters, Map filters, List availableMeals) {
+dynamic returnRoutes(Function setFilters, Map filters, List availableMeals, List favoriteMeals, Function addToFavorites, Function isMealFavorite) {
   return {
-    routeNames['homeScreen']: (ctx) => TabScreen(),
+    routeNames['homeScreen']: (ctx) => TabScreen(favoriteMeals),
     routeNames['categoryMealsScreen']: (ctx) => CategoryMealsScreen(availableMeals),
-    routeNames['mealDetails']: (ctx) => MealDetails(),
+    routeNames['mealDetails']: (ctx) => MealDetails(addToFavorites, isMealFavorite),
     routeNames['filters']: (ctx) => FilterSettingsScreen(setFilters, filters)
   };
 }

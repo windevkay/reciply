@@ -1,0 +1,18 @@
+sudo: required
+
+notifications:
+    slack: stagefirelabs:CPjVPtuyDqquvTfpnF0AdIeN
+
+services:
+ - docker
+
+before_install:
+ - docker build -t kolabayo360/reciply .
+
+script:
+ - docker run -e CI=true kolabayo360/reciply flutter test
+
+after_success:
+    #login to docker hub
+ - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+ - docker push kolabayo360/reciply
