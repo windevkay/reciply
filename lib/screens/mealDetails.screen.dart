@@ -74,7 +74,7 @@ class MealDetails extends StatelessWidget {
                       ),
                       title: Text(selectedMeal.steps[index]),
                     ),
-                    Divider()//presents a light grey divider between the list
+                    Divider() //presents a light grey divider between the list
                   ],
                 ),
                 itemCount: selectedMeal.steps.length,
@@ -83,6 +83,13 @@ class MealDetails extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.delete),
+          onPressed: () {
+            //when we pop this page, the data that is sent back, i.e. mealId to the page immediately before this one
+            //can be accessed within the future, of the pushnamed method that brought this route up in the first place
+            Navigator.of(context).pop(mealId);
+          }),
     );
   }
 }

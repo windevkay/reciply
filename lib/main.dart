@@ -1,18 +1,56 @@
 import 'package:flutter/material.dart';
 
 import './routes/routes.dart';
-import './screens/categories.screen.dart';
+import './screens/tabs.screen.dart';
+import './models/meal.model.dart';
+
+import './dummy_data.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> _filters = {
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false
+  };
+
+  List<Meal> _availableMeals = DUMMY_MEALS;
+
+  void _setFilters(Map<String, bool> filterData) {
+    setState(() {
+      _filters = filterData;
+
+      _availableMeals = DUMMY_MEALS.where((meal){
+        if(_filters['gluten'] && !meal.isGlutenFree){
+          return false;
+        }
+        if(_filters['lactose'] && !meal.isLactoseFree){
+          return false;
+        }
+        if(_filters['vegan'] && !meal.isVegan){
+          return false;
+        }
+        if(_filters['vegetarian'] && !meal.isVegetarian){
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Reciply',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        primarySwatch: Colors.teal,
         accentColor: Colors.amber,
         //canvasColor: Color.fromRGBO(255, 254, 229, 1),
         fontFamily: 'Quicksand',
@@ -28,7 +66,7 @@ class MyApp extends StatelessWidget {
       ),
       //home: CategoriesScreen(),
       initialRoute: '/',
-      routes: routes,
+      routes: returnRoutes(_setFilters, _filters, _availableMeals),
       //flutter routes for fallbacks and handling weird route situations
       onGenerateRoute: (settings) {//will default to this route if route isnt found in routes table
       //you can use the default settings arg available in this function to dynamically
@@ -36,11 +74,11 @@ class MyApp extends StatelessWidget {
       // if(settings.name == './my-dynamic-route'){
       //   return 'material page route with some screen';
       // }
-        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+        return MaterialPageRoute(builder: (ctx) => TabScreen());
       },
       onUnknownRoute: (settings) {//this one is a last resort function that can be used if route isnt found on routes table
       //and also if on generate route is not defined
-        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+        return MaterialPageRoute(builder: (ctx) => TabScreen());
       },
     );
   }

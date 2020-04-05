@@ -10,15 +10,16 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
+  final Function removeItem;
 
   MealItem(
-      {
-      @required this.id,
+      {@required this.id,
       @required this.title,
       @required this.imageUrl,
       @required this.duration,
       @required this.complexity,
-      @required this.affordability});
+      @required this.affordability,
+      @required this.removeItem});
 
   String get complexityText {
     switch (complexity) {
@@ -53,7 +54,13 @@ class MealItem extends StatelessWidget {
   }
 
   void selectMeal(BuildContext context) {
-    Navigator.of(context).pushNamed(routeNames['mealDetails'], arguments: {'id': id});
+    Navigator.of(context).pushNamed(routeNames['mealDetails'],
+        arguments: {'id': id}).then((result) {
+      //within this future, we can get data that might be passed back after the route/screen is popped
+      if (result != null) {
+        removeItem(result);
+      }
+    });
   }
 
   @override

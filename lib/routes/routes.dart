@@ -1,11 +1,15 @@
-import '../screens/categories.screen.dart';
 import '../screens/categoryMeals.screen.dart';
 import '../screens/mealDetails.screen.dart';
+import '../screens/tabs.screen.dart';
+import '../screens/filterSettings.screen.dart';
 
 import './routes.names.dart';
 
-final routes = {
-  routeNames['homeScreen']: (ctx) => CategoriesScreen(),
-  routeNames['categoryMealsScreen']: (ctx) => CategoryMealsScreen(),
-  routeNames['mealDetails']: (ctx) => MealDetails()
-};
+dynamic returnRoutes(Function setFilters, Map filters, List availableMeals) {
+  return {
+    routeNames['homeScreen']: (ctx) => TabScreen(),
+    routeNames['categoryMealsScreen']: (ctx) => CategoryMealsScreen(availableMeals),
+    routeNames['mealDetails']: (ctx) => MealDetails(),
+    routeNames['filters']: (ctx) => FilterSettingsScreen(setFilters, filters)
+  };
+}
